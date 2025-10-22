@@ -1,0 +1,38 @@
+# =========================
+# Rust / Cargo
+# =========================
+
+/target/        # Compiled output and build artifacts
+**/*.rs.bk      # Backup Rust source files (optional)
+
+# =========================
+# IDE / Editor files
+# =========================
+
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+.idea/
+.vscode/
+*.iml
+
+# =========================
+# System files
+# =========================
+
+.DS_Store
+Thumbs.db
+
+# =========================
+# Log files
+# =========================
+
+*.log
+
+# =========================
+# Cargo.lock
+# =========================
+
+# Ignore Cargo.lock because this is a library (crates.io style)
+Cargo.lock
