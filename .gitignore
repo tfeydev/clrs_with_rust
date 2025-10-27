@@ -2,8 +2,11 @@
 # Rust / Cargo
 # =========================
 
-/target/        # Compiled output and build artifacts
-**/*.rs.bk      # Backup Rust source files (optional)
+# Compiled output and build artifacts
+target/   
+     
+# Backup Rust source files (optional)
+**/*.rs.bk      
 
 # =========================
 # IDE / Editor files
