@@ -1,4 +1,4 @@
-use clrs::insertion_sort::insertion_sort;
+use clrs::algorithms::insertion_sort::insertion_sort;
 
 /// Tests the insertion sort algorithm with different types of input data.
 ///
