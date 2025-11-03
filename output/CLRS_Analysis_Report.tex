@@ -1,16 +1,13 @@
 
 \documentclass[12pt, a4paper]{report}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{listings}
-\usepackage{xcolor}
-
+\usepackage{amsmath, amssymb, listings, xcolor, csquotes, babel}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
 \lstdefinelanguage{Rust}{
     keywords={as, break, const, continue, crate, else, enum, extern, false, fn, for, if, impl, in, let, loop, match, mod, move, mut, pub, ref, return, Self, self, static, struct, super, trait, true, type, unsafe, use, where, while},
     keywordstyle=\color{blue}\bfseries,
     identifierstyle=\color{black},
-    sensitive=true,
     comment=[l]{//},
     morecomment=[s]{/*}{*/},
     commentstyle=\color{gray}\ttfamily,
@@ -18,7 +15,6 @@
     stringstyle=\color{red}\ttfamily,
     showstringspaces=false
 }
-\usepackage[english]{babel}
 \usepackage[
     backend=bibtex, 
     style=numeric,
@@ -43,36 +39,12 @@
 \maketitle
 \tableofcontents
 
-\begin{abstract}
-This report documents the analysis and implementation of core algorithms from "Introduction to Algorithms" (CLRS) using Rust. Focus is on verifying theoretical complexity against practical implementation, starting with Insertion Sort.
-\end{abstract}
+% --- Dynamic chapters injected here ---
+\input{../latex/chapters/insertion_sort.tex}
 
-\chapter{Introduction}
-\section{Motivation and Scope}
-The goal is to bridge theoretical analysis (CLRS) and systems-level Rust programming. Algorithms like Insertion Sort ensure correctness and crate stability.
-
-\chapter{Algorithm Analysis: Insertion Sort}
-\section{Algorithm Description and Pseudocode}
-Insertion Sort maintains the sorted subarray invariant.
-
-\subsection{Pseudocode Listing}
-\begin{lstlisting}[caption={Insertion Sort Pseudocode (CLRS)}]
-INSERTION-SORT(A)
-  for j = 2 to A.length
-    key = A[j]
-    i = j - 1
-    while i > 0 and A[i] > key
-      A[i+1] = A[i]
-      i = i - 1
-    A[i+1] = key
-\end{lstlisting}
-
-\section{Complexity Analysis}
-Worst-case occurs for reverse-sorted arrays: $T(n) = \Theta(n^2)$.
-
-\section{Implementation and Verification}
-\subsection{Rust Code Listing}
-\begin{lstlisting}[caption={Insertion Sort in Rust (\texttt{algorithms} Crate)}]
+\chapter{Example: Insertion Sort (Inline)}
+\section{Implementation Listing}
+\begin{lstlisting}[caption={Insertion Sort in Rust (\texttt{algorithms} crate)}]
 pub fn insertion_sort<T>(arr: &mut [T])
 where
     T: PartialOrd + Copy,
@@ -89,14 +61,6 @@ where
     }
 }
 \end{lstlisting}
-
-\subsection{Execution Example}
-Running the algorithm with a small, unsorted array \{5, 2, 4, 6, 1, 3\} yields:
-\begin{verbatim}
---- Running Insertion Sort ---
-Input: [5, 2, 4, 6, 1, 3]
-Output: [1, 2, 3, 4, 5, 6]
-\end{verbatim}
 
 \chapter*{References}
 \addcontentsline{toc}{chapter}{References}

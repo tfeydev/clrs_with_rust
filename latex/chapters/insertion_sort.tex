@@ -1,0 +1,24 @@
+\chapter{Insertion Sort}
+
+\section{Idea}
+Insertion Sort builds the final sorted array one element at a time by shifting larger elements to the right.
+
+\section{Pseudocode (CLRS)}
+\begin{algorithm}
+\caption{INSERTION-SORT$(A)$}
+\begin{algorithmic}[1]
+\State \textbf{Input:} Array $A[1..n]$
+\For{$j \gets 2$ \textbf{to} $n$}
+  \State $key \gets A[j]$
+  \State $i \gets j - 1$
+  \While{$i > 0$ \textbf{ and } $A[i] > key$}
+    \State $A[i+1] \gets A[i]$
+    \State $i \gets i - 1$
+  \EndWhile
+  \State $A[i+1] \gets key$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\section{Complexity}
+Worst-case time $\Theta(n^2)$; space $\Theta(1)$.
