@@ -1,4 +1,5 @@
 use std::env;
+use algorithms;
 
 use crate::algorithms::{
     insertion_sort::insertion_sort as InsertionSort,

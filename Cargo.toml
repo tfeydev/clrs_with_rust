@@ -1,3 +1,11 @@
+[package]
+name = "clrs"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+algorithms = { path = "algorithms" }
+
 [workspace]
 members = [
     "algorithms",
@@ -8,4 +16,3 @@ members = [
     "exercises/exercise_2_1_5",
 ]
 resolver = "2"
-
