@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 algorithms = { path = "algorithms" }
+glob = "0.3.0"
 
 [workspace]
 members = [
