@@ -5,8 +5,12 @@ use std::path::{Path};
 use std::error::Error;
 use std::process::{Command, Stdio};
 
-// Dein Algorithmus-Crate
-use algorithms::insertion_sort::insertion_sort as InsertionSort;
+// Algorithms-Crate
+use algorithms;
+
+use crate::algorithms::{
+    sorting::insertion_sort::insertion_sort as InsertionSort,
+};
 
 // ------------------------------------------
 // COMPILATION HELPERS
