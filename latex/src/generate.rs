@@ -25,14 +25,14 @@ pub fn generate_clrs_doc() -> Result<(), Box<dyn Error>> {
     let rust_code_snippet = r#"
 pub fn insertion_sort<T>(arr: &mut [T])
 where
-    T: PartialOrd + Copy,
+    T: Ord + Clone,
 {
     if arr.len() < 2 { return; }
     for i in 1..arr.len() {
-        let key = arr[i];
+        let key = arr[i].clone();
         let mut j = i;
         while j > 0 && arr[j - 1] > key {
-            arr[j] = arr[j - 1];
+            arr[j] = arr[j - 1].clone();
             j -= 1;
         }
         arr[j] = key;

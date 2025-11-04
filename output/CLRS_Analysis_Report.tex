@@ -42,19 +42,20 @@
 % --- Dynamic chapters injected here ---
 \input{../latex/chapters/insertion_sort.tex}
 
+
 \chapter{Example: Insertion Sort (Inline)}
 \section{Implementation Listing}
 \begin{lstlisting}[caption={Insertion Sort in Rust (\texttt{algorithms} crate)}]
 pub fn insertion_sort<T>(arr: &mut [T])
 where
-    T: PartialOrd + Copy,
+    T: Ord + Clone,
 {
     if arr.len() < 2 { return; }
     for i in 1..arr.len() {
-        let key = arr[i];
+        let key = arr[i].clone();
         let mut j = i;
         while j > 0 && arr[j - 1] > key {
-            arr[j] = arr[j - 1];
+            arr[j] = arr[j - 1].clone();
             j -= 1;
         }
         arr[j] = key;
