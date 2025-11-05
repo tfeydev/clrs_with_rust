@@ -1,0 +1,29 @@
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{newunicodechar}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{listings}
+\usepackage{graphicx}
+
+% Define a few Unicode shortcuts that appear in generated text
+\newunicodechar{–}{-}
+\newunicodechar{—}{--}
+\newunicodechar{…}{\dots}
+\newunicodechar{“}{``}
+\newunicodechar{”}{''}
+\newunicodechar{’}{'}
+
+% Basic listings configuration for monospaced blocks
+\lstset{
+	basicstyle=\ttfamily\small,
+	frame=single,
+	breaklines=true,
+	showstringspaces=false,
+	columns=flexible,
+	keepspaces=true
+}

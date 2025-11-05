@@ -1,0 +1,35 @@
+% =======================================================
+% Algorithm section and code listing macros (STABLE)
+% =======================================================
+
+% --- Rust code listing macro ---
+\newcommand{\CodeListing}[1]{%
+	\lstinputlisting[
+		caption={Rust implementation for \texttt{\detokenize{#1}}},
+		label={lst:#1}
+	]{listings/#1.rs}%
+}
+
+% --- Algorithm section (no catcodes, listings-safe) ---
+\newcommand{\AlgorithmSection}[2]{%
+	\clearpage%
+	\chapter{#2}%
+	\label{alg:#1}%
+
+	\section*{Pseudocode}%
+	% Render pseudocode as plain text listing
+	\lstinputlisting[
+		language={},
+		basicstyle=\ttfamily\footnotesize,
+		frame=single,
+		breaklines=true,
+		showstringspaces=false,
+		keepspaces=true,
+		columns=flexible,
+		escapeinside={@@}{@@},
+		literate={{\$}}{{\$}}1
+	]{generated/#1_pseudo.tex}
+
+	\section*{Implementation}%
+	\CodeListing{#1}%
+}
