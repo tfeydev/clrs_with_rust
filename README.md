@@ -57,7 +57,7 @@ output/CLRS_Analysis_Report.pdf
 
 > *“Insertion Sort” shown as pseudocode and Rust implementation — automatically generated from YAML and code.*
 
-[📄 View Example Report (PDF)](output/main.pdf)
+[📄 View Example Report (PDF)](latex/output/main.pdf)
 
 ---
 
