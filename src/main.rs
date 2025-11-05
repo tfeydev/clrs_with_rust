@@ -6,7 +6,6 @@ use algorithms::sorting::insertion_sort::insertion_sort as InsertionSort;
 
 // Import LaTeX generation pipeline
 use latex::generate::generate_clrs_doc;
-use latex::build::build_report;
 
 fn main() -> Result<(), Box<dyn Error>> {
     let args: Vec<String> = env::args().collect();
@@ -23,7 +22,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         "doc" => {
             println!("--- Generating LaTeX documentation ---");
             generate_clrs_doc()?; // Step 1: generate chapters + copy Rust files
-            build_report()?;      // Step 2: compile PDF via pdflatex
             println!("✅ Report generated successfully!");
         }
 

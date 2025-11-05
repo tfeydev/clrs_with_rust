@@ -1,7 +1,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{textcomp}
-\usepackage{newunicodechar}
 \usepackage[english]{babel}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{xcolor}
@@ -11,12 +10,12 @@
 \usepackage{graphicx}
 
 % Define a few Unicode shortcuts that appear in generated text
-\newunicodechar{–}{-}
-\newunicodechar{—}{--}
-\newunicodechar{…}{\dots}
-\newunicodechar{“}{``}
-\newunicodechar{”}{''}
-\newunicodechar{’}{'}
+\DeclareUnicodeCharacter{2013}{-} % en dash
+\DeclareUnicodeCharacter{2014}{--} % em dash
+\DeclareUnicodeCharacter{2026}{\dots} % ellipsis
+\DeclareUnicodeCharacter{201C}{``} % left double quote
+\DeclareUnicodeCharacter{201D}{''} % right double quote
+\DeclareUnicodeCharacter{2019}{'} % right single quote
 
 % Basic listings configuration for monospaced blocks
 \lstset{

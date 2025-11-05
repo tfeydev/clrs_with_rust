@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use serde::Deserialize;
+use tempfile::TempDir;
 use walkdir::WalkDir;
 
 /// Struct representing the YAML report file
@@ -109,12 +110,16 @@ pub fn generate_clrs_doc() -> Result<(), Box<dyn Error>> {
         writeln!(tex_out, "\\AlgorithmSection{{{}}}{{{}}}", id, title)?;
     }
 
-    // Run LaTeX (2 passes)
+    // Run LaTeX (2 passes) inside a temporary build directory
+    let build_dir = TempDir::new()?;
     let main_tex = base_dir.join("main.tex");
-    run_pdflatex(&main_tex)?;
+    run_pdflatex(&main_tex, build_dir.path())?;
 
-    // Cleanup and move results
-    finalize_output(base_dir)?;
+    // Move artefacts into latex/output and keep workspace clean
+    finalize_output(base_dir, build_dir.path())?;
+
+    // Explicitly close to surface potential filesystem errors
+    build_dir.close()?;
 
     Ok(())
 }
@@ -129,8 +134,8 @@ fn find_rust_file(base_dir: &Path, id: &str) -> Result<PathBuf, Box<dyn Error>> 
     Err(format!("Rust source file for '{}' not found in {:?}", id, base_dir).into())
 }
 
-/// Run pdflatex with full output
-fn run_pdflatex(tex_path: &Path) -> Result<(), Box<dyn Error>> {
+/// Run pdflatex with full output into the given build directory
+fn run_pdflatex(tex_path: &Path, output_dir: &Path) -> Result<(), Box<dyn Error>> {
     let work_dir = tex_path
         .parent()
         .map(|p| p.to_path_buf())
@@ -139,6 +144,7 @@ fn run_pdflatex(tex_path: &Path) -> Result<(), Box<dyn Error>> {
         .file_name()
         .and_then(|s| s.to_str())
         .ok_or("invalid tex file name")?;
+    fs::create_dir_all(output_dir)?;
 
     for pass in 1..=2 {
         println!("--- pdflatex pass {} ---", pass);
@@ -146,6 +152,8 @@ fn run_pdflatex(tex_path: &Path) -> Result<(), Box<dyn Error>> {
             .current_dir(&work_dir)
             .arg("-interaction=nonstopmode")
             .arg("-halt-on-error")
+            .arg("-output-directory")
+            .arg(output_dir)
             .arg(file_name)
             .output()?;
         if !output.status.success() {
@@ -165,56 +173,31 @@ fn run_pdflatex(tex_path: &Path) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-/// Remove all temporary LaTeX files and move results to /output
-fn finalize_output(base_dir: &Path) -> Result<(), Box<dyn Error>> {
+/// Copy final artefacts to latex/output while leaving the workspace clean.
+fn finalize_output(base_dir: &Path, build_dir: &Path) -> Result<(), Box<dyn Error>> {
     let output_dir = base_dir.join("output");
     fs::create_dir_all(&output_dir)?;
 
-    let disposable_exts = [
-        "aux",
-        "log",
-        "out",
-        "toc",
-        "synctex.gz",
-        "fdb_latexmk",
-        "fls",
-    ];
-    let disposable_files = ["texput.log"];
-
-    for entry in fs::read_dir(base_dir)? {
-        let entry = entry?;
-        let path = entry.path();
-        if path.is_file() {
-            if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
-                if disposable_files.contains(&name) {
-                    fs::remove_file(&path)?;
-                    continue;
-                }
-            }
-
-            if let Some(ext) = path.extension().and_then(|e| e.to_str()) {
-                if disposable_exts.contains(&ext) {
-                    fs::remove_file(&path)?;
-                }
-            }
-        }
+    let pdf_src = build_dir.join("main.pdf");
+    if !pdf_src.exists() {
+        return Err(format!("expected PDF at {:?}, but it was not generated", pdf_src).into());
+    }
+    let pdf_dst = output_dir.join("main.pdf");
+    fs::copy(&pdf_src, &pdf_dst)?;
+    let workspace_pdf = base_dir.join("main.pdf");
+    if workspace_pdf.exists() {
+        fs::remove_file(&workspace_pdf)?;
     }
 
-    // Move PDF and copy template to output/
-    for file in ["main.pdf", "main.tex"] {
-        let src = base_dir.join(file);
-        let dst = output_dir.join(file);
-        if !src.exists() {
-            continue;
-        }
-
-        if file == "main.pdf" {
-            fs::rename(&src, &dst)?;
-        } else if file == "main.tex" {
-            fs::copy(&src, &dst)?;
-        }
+    let tex_src = base_dir.join("main.tex");
+    if tex_src.exists() {
+        let tex_dst = output_dir.join("main.tex");
+        fs::copy(&tex_src, &tex_dst)?;
     }
 
-    println!("🧹 Cleanup done. Output available in {:?}", output_dir);
+    println!(
+        "🧹 Temporary build directory cleaned. Output available in {:?}",
+        output_dir
+    );
     Ok(())
 }
